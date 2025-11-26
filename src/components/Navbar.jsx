@@ -1,26 +1,44 @@
-import { NavLink } from "react-router-dom";
-import "../index.css";
-import logo from "/images/logo.png";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../index.css'; // Pastikan import css benar
 
-export default function Navbar() {
+const Navbar = () => {
+  // State untuk toggle menu mobile
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Fungsi untuk mengubah status buka/tutup
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="navbar-wrapper">
-      <nav className="navbar">
-
+      <div className="navbar container">
+        {/* LEFT SECTION */}
         <div className="navbar-left">
-          <img src={logo} alt="Logo" className="navbar-logo" />
+          <img src="/images/logo.png" alt="Logo" className="navbar-logo" />
           <span className="navbar-title">KING BARBERSHOP</span>
         </div>
 
-        <div className="menu">
-          <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/services">Services</NavLink>
-          <NavLink to="/capster">Capster</NavLink> {/* ← TAMBAH MENU INI */}
-          <NavLink to="/booking">Booking</NavLink>
-          <NavLink to="/about">About</NavLink>
+        {/* HAMBURGER MENU (Hanya muncul di Mobile) */}
+        <div className="hamburger" onClick={toggleMenu}>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
         </div>
 
-      </nav>
+        {/* MENU LINKS */}
+        {/* Tambahkan class 'active' jika isOpen bernilai true */}
+        <div className={`menu ${isOpen ? 'active' : ''}`}>
+          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/services" onClick={() => setIsOpen(false)}>Services</Link>
+          <Link to="/capster" onClick={() => setIsOpen(false)}>Capster</Link>
+          <Link to="/booking" onClick={() => setIsOpen(false)}>Booking</Link>
+          <Link to="/about" onClick={() => setIsOpen(false)}>About</Link>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Navbar;
