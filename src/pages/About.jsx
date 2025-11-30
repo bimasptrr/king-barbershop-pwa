@@ -33,7 +33,7 @@ const About = () => {
             </p>
             
             <Link to="/booking" className="btn-about-cta">
-              Booking Appointment
+              Booking Now!
             </Link>
           </div>
         </div>

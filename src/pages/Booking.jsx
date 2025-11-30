@@ -11,6 +11,7 @@ const Booking = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
+  // 1. Ambil Data Service & Capster
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,15 +28,46 @@ const Booking = () => {
     fetchData();
   }, []);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  // 2. Buat Daftar Jam (09:00 - 21:00)
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let i = 9; i <= 21; i++) {
+      const hour = i < 10 ? `0${i}` : i;
+      slots.push(`${hour}:00`);
+    }
+    return slots;
+  };
+  const timeSlots = generateTimeSlots();
 
+  // === 3. HANDLE CHANGE (UPDATE: Hanya Angka untuk Telepon) ===
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'phone') {
+      // Regex: Ganti semua karakter yang BUKAN angka (0-9) dengan string kosong
+      const numericValue = value.replace(/[^0-9]/g, '');
+      setFormData({ ...formData, [name]: numericValue });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  // === 4. HANDLE SUBMIT (UPDATE: Validasi Minimal 12 Digit) ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
-    if (!formData.serviceId || !formData.capsterId) {
-      setMessage({ type: 'error', text: 'Mohon pilih Layanan dan Kapster!' });
+    // Validasi Kelengkapan Data
+    if (!formData.serviceId || !formData.capsterId || !formData.time) {
+      setMessage({ type: 'error', text: 'Mohon lengkapi semua data booking!' });
+      setLoading(false);
+      return;
+    }
+
+    // Validasi Nomor Telepon Minimal 12 Angka
+    if (formData.phone.length < 12) {
+      setMessage({ type: 'error', text: 'Nomor WhatsApp tidak valid (Minimal 12 digit angka)!' });
       setLoading(false);
       return;
     }
@@ -74,7 +106,6 @@ const Booking = () => {
         
         <h2 className="section-title">Form Booking Online</h2>
 
-        {/* Tombol Cek Antrian (Lebar Penuh agar sejajar form) */}
         <div style={{ marginBottom: '30px', width: '100%', maxWidth: '1000px', textAlign: 'center' }}>
           <Link to="/queue" className="btn-check-queue">
             📋 Cek Daftar Antrian Hari Ini
@@ -95,46 +126,68 @@ const Booking = () => {
         <div className="booking-card">
           <form onSubmit={handleSubmit}>
             
-            {/* BARIS 1: NAMA & TELEPON (2 KOLOM) */}
+            {/* BARIS 1: NAMA & TELEPON */}
             <div className="form-row">
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Nama Lengkap</label>
-                <input type="text" name="name" className="booking-input" placeholder="Contoh: Bimas Putra" value={formData.name} onChange={handleChange} required />
+                <input type="text" name="name" className="booking-input" placeholder="Contoh: iras" value={formData.name} onChange={handleChange} required />
               </div>
 
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Nomor WhatsApp</label>
-                <input type="tel" name="phone" className="booking-input" placeholder="Contoh: 081234567890" value={formData.phone} onChange={handleChange} required />
+                {/* INPUT TELEPON KHUSUS */}
+                <input 
+                  type="tel" 
+                  name="phone" 
+                  className="booking-input" 
+                  placeholder="Contoh: 081234567890" 
+                  value={formData.phone} 
+                  onChange={handleChange}
+                  inputMode="numeric" // Memunculkan keyboard angka di HP
+                  maxLength={15}      // Batas wajar nomor HP
+                  required 
+                />
+                <small style={{ color: '#888', fontSize: '12px' }}>*Hanya angka, min. 12 digit</small>
               </div>
             </div>
 
-            {/* BARIS 2: SERVICE (FULL WIDTH) */}
+            {/* BARIS 2: SERVICE */}
             <div className="booking-form-group">
               <label className="booking-label">Pilih Layanan</label>
               <select name="serviceId" className="booking-select" value={formData.serviceId} onChange={handleChange} required>
                 <option value="">-- Pilih Service --</option>
-                {services.map((srv) => <option key={srv.id} value={srv.id}>{srv.name} - Rp {parseInt(srv.price).toLocaleString('id-ID')}</option>)}
+                {services.map((srv) => (
+                  <option key={srv.id} value={srv.id}>{srv.name} - Rp {parseInt(srv.price).toLocaleString('id-ID')}</option>
+                ))}
               </select>
             </div>
 
-            {/* BARIS 3: CAPSTER (FULL WIDTH) */}
+            {/* BARIS 3: CAPSTER */}
             <div className="booking-form-group">
               <label className="booking-label">Pilih Kapster</label>
               <select name="capsterId" className="booking-select" value={formData.capsterId} onChange={handleChange} required>
                 <option value="">-- Pilih Kapster --</option>
-                {capsters.map((cap) => <option key={cap.id} value={cap.id}>{cap.name} (⭐ {cap.rating})</option>)}
+                {capsters.map((cap) => (
+                  <option key={cap.id} value={cap.id}>{cap.name} (⭐ {cap.rating})</option>
+                ))}
               </select>
             </div>
 
-            {/* BARIS 4: TANGGAL & JAM (2 KOLOM) */}
+            {/* BARIS 4: TANGGAL & JAM */}
             <div className="form-row">
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Tanggal</label>
                 <input type="date" name="date" className="booking-input" value={formData.date} onChange={handleChange} required />
               </div>
+              
               <div className="booking-form-group" style={{ flex: 1 }}>
-                <label className="booking-label">Jam</label>
-                <input type="time" name="time" className="booking-input" value={formData.time} onChange={handleChange} required />
+                <label className="booking-label">Jam (09:00 - 21:00)</label>
+                <select name="time" className="booking-select" value={formData.time} onChange={handleChange} required>
+                  <option value="">-- Pilih Jam --</option>
+                  {timeSlots.map((slot, index) => (
+                    <option key={index} value={slot}>{slot}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -144,7 +197,7 @@ const Booking = () => {
           </form>
         </div>
 
-        {/* SECTION PERATURAN (Lebar disesuaikan) */}
+        {/* SECTION PERATURAN */}
         <div className="booking-rules" style={{ maxWidth: '1000px' }}>
           <div className="rules-title">⚠️ <span>Penting Sebelum Booking</span></div>
           <ul>
@@ -152,6 +205,7 @@ const Booking = () => {
             <li>Keterlambatan lebih dari 15 menit akan dialihkan ke pelanggan lain.</li>
             <li>Reschedule maksimal <strong>H-1</strong>.</li>
             <li>Pastikan nomor WhatsApp aktif untuk konfirmasi.</li>
+            <li>Minimal ganteng</li>
           </ul>
         </div>
 

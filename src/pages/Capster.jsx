@@ -38,7 +38,7 @@ const Capster = () => {
   return (
     <div className="page capster-page">
       <div className="container">
-        <h2 className="section-title">Tim Profesional Kami</h2>
+        <h2 className="section-title">Tim Kami</h2>
         
         <div className="capster-list">
           {capsters.map((capster) => (

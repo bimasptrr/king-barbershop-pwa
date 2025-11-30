@@ -36,7 +36,7 @@ const Services = () => {
   return (
     <div className="page services-page">
       <div className="container">
-        <h2 className="section-title">Layanan Eksklusif Kami</h2>
+        <h2 className="section-title">Layanan Kami</h2>
 
         {/* Tombol Antrian SUDAH DIHAPUS DARI SINI */}
 
