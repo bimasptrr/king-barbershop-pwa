@@ -16,8 +16,8 @@ const Booking = () => {
     const fetchData = async () => {
       try {
         const [resServices, resCapsters] = await Promise.all([
-          fetch('http://localhost:5000/api/services'),
-          fetch('http://localhost:5000/api/capsters')
+          fetch('https://king-barber-api.vercel.app/api/services'),
+          fetch('https://king-barber-api.vercel.app/api/capsters')
         ]);
         setServices(await resServices.json());
         setCapsters(await resCapsters.json());
@@ -73,7 +73,7 @@ const Booking = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/bookings', {
+      const response = await fetch('https://king-barber-api.vercel.app/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

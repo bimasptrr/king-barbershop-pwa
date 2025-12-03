@@ -9,7 +9,7 @@ const Queue = () => {
     const fetchBookings = async () => {
       try {
         // Panggil API Backend
-        const response = await fetch('http://localhost:5000/api/bookings');
+        const response = await fetch('https://king-barber-api.vercel.app/api/bookings');
         const data = await response.json();
         
         // Urutkan berdasarkan Tanggal & Jam terdekat

@@ -7,7 +7,7 @@ export default function ServiceDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/services/${id}`)
+    fetch(`https://king-barber-api.vercel.app/api/services/${id}`)
       .then(r => {
         if (!r.ok) throw new Error("Not found");
         return r.json();

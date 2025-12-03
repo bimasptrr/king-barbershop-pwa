@@ -9,7 +9,7 @@ const Capster = () => {
   useEffect(() => {
     const fetchCapsters = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/capsters');
+        const response = await fetch('https://king-barber-api.vercel.app/api/capsters');
         const data = await response.json();
         setCapsters(data);
         setLoading(false);
