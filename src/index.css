@@ -240,3 +240,98 @@ img { max-width: 100%; display: block; }
 .loading-container { height: 80vh; display: flex; justify-content: center; align-items: center; }
 .spinner { width: 40px; height: 40px; border: 4px solid var(--gold); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ================= SPLASH SCREEN (ANIMASI & TEMA) ================= */
+
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000; /* Hitam Pekat */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Pastikan di atas segalanya */
+  overflow: hidden;
+}
+
+.splash-content {
+  text-align: center;
+  animation: fadeUp 0.8s ease-out;
+}
+
+/* Logo dengan efek denyut (Pulse) */
+.splash-logo {
+  width: 120px;
+  height: auto;
+  margin: 0 auto 20px;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)); /* Glow Emas */
+  animation: pulseLogo 2s infinite ease-in-out;
+}
+
+/* Judul Brand */
+.splash-title {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.splash-subtitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  color: #888;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+/* Loading Bar Container */
+.loading-bar-container {
+  width: 200px;
+  height: 4px;
+  background: #222;
+  border-radius: 10px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Loading Bar Animasi */
+.loading-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--gold); /* Warna Emas */
+  border-radius: 10px;
+  transform-origin: left;
+  animation: loadingProgress 3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  box-shadow: 0 0 10px var(--gold); /* Efek cahaya pada bar */
+}
+
+
+/* === KEYFRAMES ANIMASI === */
+
+/* 1. Muncul dari bawah pelan */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. Logo Berdenyut Halus */
+@keyframes pulseLogo {
+  0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+}
+
+/* 3. Progress Bar Jalan */
+@keyframes loadingProgress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
