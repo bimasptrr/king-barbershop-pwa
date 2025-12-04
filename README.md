@@ -9,6 +9,7 @@ NIM: 21120123130104
 🚀 Demo Aplikasi
 Aplikasi ini telah di-deploy dan dapat diakses melalui Vercel:
 🔗 Live Demo: https://king-barbershop-pwa.vercel.app/
+🔗 Live API: https://king-barber-api.vercel.app/
 
 ✨ Fitur Utama
 📱 Progressive Web App (PWA)
@@ -59,7 +60,7 @@ Routes: endpoint seperti /api/services, /api/bookings, dll.
 | duration    | Text    | Durasi pengerjaan |
 | image_url   | Text    | Gambar layanan    |
 
-2. Tabel capsters
+Tabel capsters
 | Kolom     | Tipe    | Keterangan      |
 | --------- | ------- | --------------- |
 | id        | UUID    | Primary Key     |
