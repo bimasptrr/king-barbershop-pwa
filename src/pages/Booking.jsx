@@ -5,13 +5,15 @@ const Booking = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [capsters, setCapsters] = useState([]);
+  
+  // ... (State formData, loading, message tetap sama) ...
   const [formData, setFormData] = useState({
     name: '', phone: '', serviceId: '', capsterId: '', date: '', time: ''
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  // 1. Ambil Data Service & Capster
+  // ... (useEffect fetch data tetap sama) ...
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,7 +30,6 @@ const Booking = () => {
     fetchData();
   }, []);
 
-  // 2. Buat Daftar Jam (09:00 - 21:00)
   const generateTimeSlots = () => {
     const slots = [];
     for (let i = 9; i <= 21; i++) {
@@ -39,12 +40,9 @@ const Booking = () => {
   };
   const timeSlots = generateTimeSlots();
 
-  // === 3. HANDLE CHANGE (UPDATE: Hanya Angka untuk Telepon) ===
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === 'phone') {
-      // Regex: Ganti semua karakter yang BUKAN angka (0-9) dengan string kosong
       const numericValue = value.replace(/[^0-9]/g, '');
       setFormData({ ...formData, [name]: numericValue });
     } else {
@@ -52,27 +50,56 @@ const Booking = () => {
     }
   };
 
-  // === 4. HANDLE SUBMIT (UPDATE: Validasi Minimal 12 Digit) ===
+  // === FUNGSI BARU: KIRIM KONFIRMASI WA ===
+  const sendWhatsAppConfirmation = (data, serviceName, capsterName) => {
+    // 1. Format Nomor HP (Ganti 08 di depan jadi 628)
+    let phoneNumber = data.phone;
+    if (phoneNumber.startsWith('0')) {
+      phoneNumber = '62' + phoneNumber.slice(1);
+    }
+
+    // 2. Susun Pesan
+    const message = `
+*KONFIRMASI BOOKING KING BARBERSHOP* 💈
+Halo Kak *${data.name}*, terima kasih telah melakukan booking!
+
+Berikut detail pesanan Anda:
+-----------------------------------
+📅 Tanggal : ${data.date}
+⏰ Jam     : ${data.time}
+💇‍♂️ Layanan : ${serviceName}
+✂️ Kapster : ${capsterName}
+-----------------------------------
+
+Mohon simpan bukti ini. Harap datang 10 menit sebelum jadwal. 
+Terima kasih! 🙏
+    `.trim();
+
+    // 3. Redirect ke WhatsApp (Membuka Tab Baru / Aplikasi WA)
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  // === HANDLE SUBMIT YANG DIPERBARUI ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
-    // Validasi Kelengkapan Data
     if (!formData.serviceId || !formData.capsterId || !formData.time) {
       setMessage({ type: 'error', text: 'Mohon lengkapi semua data booking!' });
       setLoading(false);
       return;
     }
 
-    // Validasi Nomor Telepon Minimal 12 Angka
-    if (formData.phone.length < 12) {
-      setMessage({ type: 'error', text: 'Nomor WhatsApp tidak valid (Minimal 12 digit angka)!' });
+    if (formData.phone.length < 10) {
+      setMessage({ type: 'error', text: 'Nomor WhatsApp tidak valid!' });
       setLoading(false);
       return;
     }
 
     try {
+      // 1. Simpan ke Database dulu
       const response = await fetch('https://king-barber-api.vercel.app/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -87,7 +114,16 @@ const Booking = () => {
       });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: 'Booking Berhasil! Mengalihkan...' });
+        // 2. Cari Nama Service & Capster untuk pesan WA (karena di form cuma ada ID)
+        const selectedService = services.find(s => s.id === formData.serviceId)?.name || '-';
+        const selectedCapster = capsters.find(c => c.id === formData.capsterId)?.name || '-';
+
+        // 3. Kirim WA
+        sendWhatsAppConfirmation(formData, selectedService, selectedCapster);
+
+        setMessage({ type: 'success', text: 'Booking Berhasil! Membuka WhatsApp...' });
+        
+        // 4. Reset & Redirect
         setFormData({ name: '', phone: '', serviceId: '', capsterId: '', date: '', time: '' });
         setTimeout(() => navigate('/queue'), 2000);
       } else {
@@ -125,17 +161,14 @@ const Booking = () => {
 
         <div className="booking-card">
           <form onSubmit={handleSubmit}>
-            
-            {/* BARIS 1: NAMA & TELEPON */}
             <div className="form-row">
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Nama Lengkap</label>
-                <input type="text" name="name" className="booking-input" placeholder="Contoh: iras" value={formData.name} onChange={handleChange} required />
+                <input type="text" name="name" className="booking-input" placeholder="Contoh: Bimas Putra" value={formData.name} onChange={handleChange} required />
               </div>
 
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Nomor WhatsApp</label>
-                {/* INPUT TELEPON KHUSUS */}
                 <input 
                   type="tel" 
                   name="phone" 
@@ -143,15 +176,14 @@ const Booking = () => {
                   placeholder="Contoh: 081234567890" 
                   value={formData.phone} 
                   onChange={handleChange}
-                  inputMode="numeric" // Memunculkan keyboard angka di HP
-                  maxLength={15}      // Batas wajar nomor HP
+                  inputMode="numeric"
+                  maxLength={15}
                   required 
                 />
-                <small style={{ color: '#888', fontSize: '12px' }}>*Hanya angka, min. 12 digit</small>
+                <small style={{ color: '#888', fontSize: '12px' }}>*Nomor aktif untuk menerima pesan konfirmasi</small>
               </div>
             </div>
 
-            {/* BARIS 2: SERVICE */}
             <div className="booking-form-group">
               <label className="booking-label">Pilih Layanan</label>
               <select name="serviceId" className="booking-select" value={formData.serviceId} onChange={handleChange} required>
@@ -162,7 +194,6 @@ const Booking = () => {
               </select>
             </div>
 
-            {/* BARIS 3: CAPSTER */}
             <div className="booking-form-group">
               <label className="booking-label">Pilih Kapster</label>
               <select name="capsterId" className="booking-select" value={formData.capsterId} onChange={handleChange} required>
@@ -173,7 +204,6 @@ const Booking = () => {
               </select>
             </div>
 
-            {/* BARIS 4: TANGGAL & JAM */}
             <div className="form-row">
               <div className="booking-form-group" style={{ flex: 1 }}>
                 <label className="booking-label">Tanggal</label>
@@ -192,20 +222,18 @@ const Booking = () => {
             </div>
 
             <button type="submit" disabled={loading} style={{ marginTop: '20px', padding: '18px', fontSize: '18px' }}>
-              {loading ? 'MENGIRIM...' : 'KIRIM BOOKING SEKARANG'}
+              {loading ? 'MENGIRIM...' : 'KIRIM BOOKING & TERIMA WA'}
             </button>
           </form>
         </div>
 
-        {/* SECTION PERATURAN */}
         <div className="booking-rules" style={{ maxWidth: '1000px' }}>
           <div className="rules-title">⚠️ <span>Penting Sebelum Booking</span></div>
           <ul>
             <li>Harap datang <strong>10 menit lebih awal</strong>.</li>
             <li>Keterlambatan lebih dari 15 menit akan dialihkan ke pelanggan lain.</li>
             <li>Reschedule maksimal <strong>H-1</strong>.</li>
-            <li>Pastikan nomor WhatsApp aktif untuk konfirmasi.</li>
-            <li>Minimal ganteng</li>
+            <li>Pastikan nomor WhatsApp aktif karena konfirmasi dikirim ke nomor tersebut.</li>
           </ul>
         </div>
 
