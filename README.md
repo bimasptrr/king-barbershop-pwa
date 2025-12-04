@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/logo.png" alt="King Barbershop Logo" width="120" />
+  <img src="./public/images/logo.png" alt="King Barbershop Logo" width="120" />
 </p>
 
 <h1 align="center">💈 King Barbershop — Solusi Booking Barbershop Modern</h1>
