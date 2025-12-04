@@ -1,84 +1,116 @@
-💈 King Barbershop — Solusi Booking Barbershop Anda!!!
+<p align="center">
+  <img src="./public/logo.png" alt="King Barbershop Logo" width="120" />
+</p>
 
-King Barbershop PWA adalah aplikasi web progresif (PWA) yang dirancang untuk mempermudah pelanggan dalam memesan jadwal cukur rambut tanpa harus mengantri. Dengan sistem booking real-time dan integrasi WhatsApp, aplikasi ini memberikan pengalaman grooming premium dan efisien.
+<h1 align="center">💈 King Barbershop — Solusi Booking Barbershop Modern</h1>
 
-Tugas Akhir Praktikum PPB
-Nama: Bima Saputra Aji
-NIM: 21120123130104
+King Barbershop PWA adalah aplikasi web progresif (PWA) yang mempermudah pelanggan dalam memesan jadwal cukur tanpa perlu antri. Sistem booking real-time, integrasi WhatsApp, serta UI elegan membuat pengalaman grooming menjadi lebih premium dan efisien.
 
-🚀 Demo Aplikasi
-Aplikasi ini telah di-deploy dan dapat diakses melalui Vercel:
-🔗 Live Demo: https://king-barbershop-pwa.vercel.app/
-🔗 Live API: https://king-barber-api.vercel.app/
+---
 
-✨ Fitur Utama
-📱 Progressive Web App (PWA)
-Installable di smartphone (Android/iOS) maupun desktop.
-Offline Mode untuk menampilkan konten dasar tanpa internet.
-UI seperti aplikasi dengan Bottom Navigation pada tampilan mobile.
+## 👤 Tugas Akhir Praktikum PPB
+**Nama:** Bima Saputra Aji  
+**NIM:** 21120123130104  
 
-📅 Sistem Booking Cerdas
-Booking Online dengan validasi otomatis (operasional 09:00–21:00).
-Validasi Nomor Telepon secara otomatis.
-Konfirmasi WhatsApp menggunakan pesan siap kirim.
+---
 
-📋 Informasi & Antrian
-Cek Antrian Real-time.
-Katalog Layanan lengkap dengan harga, durasi, dan deskripsi.
-Profil Capster dengan rating dan spesialisasi.
+## 🚀 Demo Aplikasi
+- 🔗 **Live Demo:** https://king-barbershop-pwa.vercel.app/  
+- 🔗 **Live API:** https://king-barber-api.vercel.app/  
 
-🛠️ Teknologi yang Digunakan
-Aplikasi dibangun menggunakan teknologi modern dengan arsitektur Monorepo (Frontend + Backend):
-| Kategori     | Teknologi             | Deskripsi                                       |
-| ------------ | --------------------- | ----------------------------------------------- |
-| **Frontend** | React.js (Vite)       | Kerangka UI yang cepat dan interaktif.          |
-| **Styling**  | CSS3 Custom           | Tema *Dark & Gold Luxury* + efek Glassmorphism. |
-| **PWA**      | Vite PWA Plugin       | Konfigurasi Service Worker & Offline Cache.     |
-| **Backend**  | Node.js & Express     | RESTful API untuk logika aplikasi.              |
-| **Database** | Supabase (PostgreSQL) | Penyimpanan data berbasis cloud.                |
+---
 
-⚙️ Alur Data & Logika Aplikasi
-1. Frontend (Client)
-Mengambil data layanan & capster melalui fetch API.
-Mengelola input melalui useState.
-Responsif untuk desktop dan mobile.
+## ✨ Fitur Utama
 
-2. Backend (Server)
-Menggunakan pola MVC:
-Controller: memproses request & validasi.
-Model: berinteraksi dengan tabel Supabase.
+### 📱 Progressive Web App (PWA)
+- Installable (Android/iOS & Desktop)  
+- Offline mode untuk konten dasar  
+- Bottom Navigation khas mobile  
 
-🗄️ Skema Database (Supabase)
-Tabel services
-Routes: endpoint seperti /api/services, /api/bookings, dll.
-| Kolom       | Tipe    | Keterangan        |
-| ----------- | ------- | ----------------- |
-| id          | UUID    | Primary Key       |
-| name        | Text    | Nama layanan      |
-| price       | Numeric | Harga             |
-| description | Text    | Deskripsi         |
-| duration    | Text    | Durasi pengerjaan |
-| image_url   | Text    | Gambar layanan    |
+---
 
-Tabel capsters
-| Kolom     | Tipe    | Keterangan      |
-| --------- | ------- | --------------- |
-| id        | UUID    | Primary Key     |
-| name      | Text    | Nama barber     |
-| rating    | Numeric | Rating performa |
-| specialty | Text    | Keahlian khusus |
-| photo_url | Text    | Foto capster    |
+### 📅 Sistem Booking Cerdas
+- Validasi otomatis (jam operasional 09.00–21.00)  
+- Validasi nomor WhatsApp  
+- Konfirmasi otomatis via WhatsApp  
 
-Tabel bookings
-| Kolom          | Tipe | Keterangan     |
-| -------------- | ---- | -------------- |
-| id             | UUID | Primary Key    |
-| customer_name  | Text | Nama pemesan   |
+---
+
+### 📋 Informasi & Antrian
+- Cek antrian real-time  
+- Katalog layanan lengkap  
+- Profil capster + rating & spesialisasi  
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+| Kategori     | Teknologi             | Deskripsi |
+|--------------|-----------------------|-----------|
+| **Frontend** | React.js (Vite)       | UI modern & cepat |
+| **Styling**  | CSS3 Custom           | Tema Dark & Gold Luxury |
+| **PWA**      | Vite PWA Plugin       | Service Worker & Offline Cache |
+| **Backend**  | Node.js + Express     | REST API |
+| **Database** | Supabase PostgreSQL   | Cloud database |
+
+---
+
+## ⚙️ Arsitektur & Alur Data
+
+### **Frontend**
+- Fetch layanan & capster dari API  
+- Mengelola input booking dengan `useState`  
+- Layout responsif desktop & mobile  
+
+### **Backend (MVC)**
+- **Model** → Akses tabel Supabase  
+- **Controller** → Validasi & proses request  
+- **Routes** → `/api/services`, `/api/capsters`, `/api/bookings`, dll  
+
+---
+
+## 🗄️ Skema Database (Supabase)
+
+### **Tabel: services**
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| id | UUID | Primary Key |
+| name | Text | Nama layanan |
+| price | Numeric | Harga |
+| description | Text | Deskripsi |
+| duration | Text | Durasi |
+| image_url | Text | Url gambar |
+
+---
+
+### **Tabel: capsters**
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| id | UUID | Primary Key |
+| name | Text | Nama barber |
+| rating | Numeric | Rating |
+| specialty | Text | Keahlian |
+| photo_url | Text | Foto |
+
+---
+
+### **Tabel: bookings**
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| id | UUID | Primary Key |
+| customer_name | Text | Nama pemesan |
 | customer_phone | Text | Nomor WhatsApp |
-| booking_date   | Date | Tanggal        |
-| booking_time   | Time | Jam            |
-| service_id     | UUID | FK ke services |
-| capster_id     | UUID | FK ke capsters |
+| booking_date | Date | Tanggal |
+| booking_time | Time | Jam |
+| service_id | UUID | FK → services |
+| capster_id | UUID | FK → capsters |
 
+---
 
+## 📦 Instalasi (Localhost)
 
+### **1. Backend**
+```bash
+cd backend
+npm install
+npm run dev
