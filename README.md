@@ -48,7 +48,7 @@ Controller: memproses request & validasi.
 Model: berinteraksi dengan tabel Supabase.
 
 🗄️ Skema Database (Supabase)
-1. Tabel services
+Tabel services
 Routes: endpoint seperti /api/services, /api/bookings, dll.
 | Kolom       | Tipe    | Keterangan        |
 | ----------- | ------- | ----------------- |
@@ -60,7 +60,7 @@ Routes: endpoint seperti /api/services, /api/bookings, dll.
 | image_url   | Text    | Gambar layanan    |
 
 2. Tabel capsters
-   | Kolom     | Tipe    | Keterangan      |
+| Kolom     | Tipe    | Keterangan      |
 | --------- | ------- | --------------- |
 | id        | UUID    | Primary Key     |
 | name      | Text    | Nama barber     |
@@ -68,8 +68,8 @@ Routes: endpoint seperti /api/services, /api/bookings, dll.
 | specialty | Text    | Keahlian khusus |
 | photo_url | Text    | Foto capster    |
 
-3. Tabel bookings
-   | Kolom          | Tipe | Keterangan     |
+Tabel bookings
+| Kolom          | Tipe | Keterangan     |
 | -------------- | ---- | -------------- |
 | id             | UUID | Primary Key    |
 | customer_name  | Text | Nama pemesan   |
